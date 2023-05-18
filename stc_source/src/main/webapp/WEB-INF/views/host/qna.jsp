@@ -22,7 +22,7 @@
                         <div class="">
                             <form action="" class="form-inline">
                                 <div class="form-group">                                   
-                                    <select name="selectedProNum" id="selectedProNum" class="form-control" title="내 공간 목록">
+                                    <select name="selectedProNum" id="selectedProNum" class="form-control" style="width: 220px;">
 										<c:forEach items="${hostQna.productList }" var="product"> 	
 				                        	<option value="${product.proNum }" >${product.proName }</option>
 										</c:forEach>
@@ -36,7 +36,7 @@
 
                 <!-- 테이블구역 -->
 				<div class="container" style="color: black; margin-top: 40px;" >
-					<table class="table table-striped" border="1px">
+					<table class="table table-striped">
 						<thead>
 				    		<tr>
 						        <th colspan="1" class="text-center">아이디</th>
@@ -51,10 +51,10 @@
 				</div>
 				
 				<!-- qna 페이징 -->
-	            <div class="col-md-12 clear"> 
+	            <div class="col-md-12 clear" style="padding-top: 100px;"> 
 					<div class="text-center">
 	    				<div class="pagination">
-	        				<ul class="pagination-sm">
+	        				<ul>
 								
 	            			</ul>
 	        			</div>
@@ -111,7 +111,13 @@
 			htmlVal += '<td colspan="1">'+qna.memId+'</td>';
 			htmlVal += '<td colspan="4">'+qna.memQuestion+'<button class="pull-right btndeleteQna" type="button" data-qnanum="'+qna.qnaNum+'">삭제</button></td>';
 			htmlVal += '<td colspan="1">';
-			htmlVal += '<button data-toggle="modal" data-target="#replyQna'+qna.qnaNum+'" type="button">수정</button>&nbsp&nbsp';
+			htmlVal += '<button data-toggle="modal" data-target="#replyQna'+qna.qnaNum+'" type="button">';
+			if(qna.hostAnswer != null){
+			htmlVal += '수정';
+			} else {
+			htmlVal += '답변';
+			}
+			htmlVal += '</button>&nbsp&nbsp';
 			htmlVal += '<button class="btnreplyDeleteQna" type="button" data-qnanum="'+qna.qnaNum+'">삭제</button>';			
 			htmlVal += '<div class="modal" id="replyQna'+qna.qnaNum+'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
 			htmlVal += '<div class="modal-dialog">';
@@ -150,7 +156,7 @@
 	
 	function displayPaging(result){
 		var htmlVal = '';
-		htmlVal += '<ul class="pagination-sm">';
+		htmlVal += '<ul>';
     				if(result.pageInfo.currentPage == 1){
 		htmlVal +='				<li><a class="disabled pe-7s-angle-left"></a></li>';
     				} else {

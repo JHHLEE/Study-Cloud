@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,6 +35,12 @@ import study.cloud.stc.product.model.vo.ProductTimeReqDto;
 import study.cloud.stc.product.model.vo.ProductVo;
 import study.cloud.stc.qna.model.service.QnaService;
 import study.cloud.stc.qna.model.vo.QnaVo;
+import study.cloud.stc.reserve.model.service.ReserveService;
+import study.cloud.stc.reserve.model.vo.MapVo;
+import study.cloud.stc.reserve.model.vo.ReserveTimeReqDto;
+import study.cloud.stc.reserve.model.vo.ReserveVo;
+import study.cloud.stc.review.model.service.ReviewService;
+import study.cloud.stc.review.model.vo.ReviewResReqVo;
  
 
 @Controller
@@ -46,6 +53,10 @@ public class HostController {
 	private ProductService pservice;
 	@Autowired
 	private MemberService mservice;
+	@Autowired
+	private ReserveService reserveService;
+	@Autowired
+	private ReviewService rv_service;
 	
 	@Autowired
 	@Qualifier("fileUtil")
@@ -177,49 +188,10 @@ public class HostController {
 	    }
 
 	    int result = pservice.insertDetail(dto);
-	    mv.setViewName("/host/product");
+	    mv.setViewName("redirect:/host/product");
 
 	    return mv;
 	}
-//	//상품등록
-//		@PostMapping("/product/insert")
-//		public ModelAndView insertProduct(
-//				ModelAndView mv
-//				, @RequestParam(name = "uploadfile", required = false) MultipartHttpServletRequest multiReq
-//				, HttpServletRequest request
-//				,ProductDetailDto dto
-//				,Principal principal
-//				) throws Exception {
-//			dto.setMemId(principal.getName());
-//			Map<String, String> filePath;
-//			try {
-//				if(multiReq != null) {
-//				for(int i=0; i<multiReq.length; i++) {
-//					MultipartFile multi = multiReq[i];
-//				filePath = fileUtil.saveFile(multi, request, null);
-//				filePath = fileUtil.saveFileList(multiReq, request, null);
-//				dto.setProPicOriginal(filePath.get("original"));
-//				dto.setProPicRename(filePath.get("rename"));
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			int result = pservice.insertDetail(dto);
-////			if(result == 4) {
-////				mv.setViewName("redirect:/host/product");
-////			}else if(result == 3) {
-////				mv.setViewName("redirect:/host/product");
-////			}else if(result == 2) {
-////				mv.setViewName("redirect:/host/product");
-////			}else {
-//				mv.addObject("message","등록");
-//				mv.setViewName("/host/product/insert");
-//			
-//			return mv;
-//		}
-//	
-//	
-	
-	
 	
 	@GetMapping("/product/update")
 	public ModelAndView updateProductPage(
@@ -237,57 +209,40 @@ public class HostController {
 	@PostMapping("/product/update")
 	public ModelAndView updateProduct(
 			ModelAndView mv
-		  , @RequestParam(name = "uploadfile", required = false) MultipartFile[] multifiles
-//		  , @RequestParam(name = "uploadfile", required = false) MultipartFile multi
-			,ProductDetailDto dto
-			
-			,Principal principal
-			, HttpServletRequest request
-			// 	@RequestParam("proNum") int proNum,
-			) throws Exception {
-		 if (multifiles != null) {
-		    	List<ProductPicDto> picList = new ArrayList<ProductPicDto>();
-		        for (int i = 0; i < multifiles.length; i++) {
-		            MultipartFile multi = multifiles[i];
-		            Map<String, String> filePath = fileUtil.saveFile(multi, request, null);
-
-		            ProductPicDto pic = new ProductPicDto(); 
-		            pic.setProPicOriginal(filePath.get("original"));
-		            pic.setProPicRename(filePath.get("rename"));
-		            picList.add(pic);
-		        }
-		        dto.setPicList(picList);
-		    }
-		
-		int result = pservice.updateProduct(dto);  // TODO ProductDetailDto으로 수정
-		if(result == 4) {
-			mv.setViewName("redirect:/host/product");
-		}else if(result == 3) {
-			mv.setViewName("redirect:/host/product");
-		}else if(result == 2) {
-			mv.setViewName("redirect:/host/product");
-		}else {
-//			mv.addObject("message","업데이트 실패");
-			mv.setViewName("redirect:/host/product");
+			  , @RequestParam(name = "uploadfile", required = false) MultipartFile multi
+				,ProductDetailDto pd
+				,Principal principal
+				, HttpServletRequest request
+				) throws Exception {
+			Map<String, String> filePath;
+			try {
+						filePath = fileUtil.saveFile(multi, request, null);
+							pd.setProPicOriginal(filePath.get("original"));
+							pd.setProPicRename(filePath.get("rename"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			int result = pservice.updateProduct(pd);  // TODO ProductDetailDto으로 수정
+			if(result == 4) {
+				mv.setViewName("redirect:/host/product");
+			}else if(result == 3) {
+				mv.setViewName("redirect:/host/product");
+			}else if(result == 2) {
+				mv.setViewName("redirect:/host/product");
+			}else {
+//				mv.addObject("message","업데이트 실패");
+				mv.setViewName("redirect:/host/product");
+			}
+			return mv;
 		}
-		return mv;
-	}
 	
 	
 	//예약관리
 	//공간관리 - RESERVETIME EDIT 공간 시간,가격설정
 	@GetMapping("/reserve/rsvprotime")
-	public ModelAndView selectRsvProtime(ModelAndView mv
-			,String proNum
-			) throws Exception {
+	public ModelAndView selectRsvProtime(ModelAndView mv, String proNum ) throws Exception {
 		mv.addObject("proNum", proNum);
 		mv.setViewName("/host/reserve/rsvprotime");
-		return mv;
-	}
-	
-	@GetMapping("/reserve/delete")
-	public ModelAndView deleteReservePage(ModelAndView mv) throws Exception {
-		mv.setViewName("/host/reserve/delete");
 		return mv;
 	}
 	
@@ -295,34 +250,84 @@ public class HostController {
 	@PostMapping("/reserve/rsvprotime")
 	@ResponseBody 
 	public String seletedValues(
-			 @RequestBody ProductTimeReqDto reqDto
+			@RequestBody ProductTimeReqDto reqDto
 			) throws Exception {			
-		pservice.insertProTime(reqDto);
-		
-		return "OK";
-	
+			int result = pservice.insertProTime(reqDto);
+			
+			return String.valueOf(result);
 	}
-	
+		
 	//예약관리 리스트 페이지
 	@GetMapping("/reserve")
-	public ModelAndView selectreserveList(ModelAndView mv) throws Exception {
+	public ModelAndView selectreserveList(
+			HttpServletRequest request, 
+			HttpServletResponse response,
+			@RequestParam(value="page", defaultValue="1") int page,
+			ModelAndView mv, 
+			Principal principal) throws Exception {
+		
 		mv.setViewName("/host/reserve/reserve");
+		
+		ReserveTimeReqDto rtDto = new ReserveTimeReqDto();
+		rtDto.setMemId(principal.getName());
+				
+		List<ReserveVo> reserveVo = reserveService.selectReserveListForHost(rtDto);
+		List<ReserveVo> listVo = reserveService.selectListForHost(rtDto);
+		List<MapVo> mapVo = reserveService.selectProNameList();
+		
+		int currentPage = page; 
+		int totalCnt= reserveService.selectTotalCount(); 
+		Map<String, Integer> map= new Paging().paging(currentPage, totalCnt, 12, 3); 
+		mv.addObject("pageInfo", map);
+		
+		request.setAttribute("reserveVo", reserveVo);
+		request.setAttribute("listVo", listVo);
+		request.setAttribute("mapVo", mapVo);
+				
 		return mv;
 	}
-	
-//		//예약관리 - 예약확인상세페이지
-//		@GetMapping("/reserve")
-//		public ModelAndView selectreserveList(ModelAndView mv) throws Exception {
-//			mv.setViewName("/host/reserve/info");
-//			return mv;
-//		}
-//	
+		
+	//예약확인상세페이지
+	@GetMapping("/reserve/reserveinfo")
+	public ModelAndView selectreserveList(ModelAndView mv) throws Exception {
+		mv.setViewName("/host/reserve/reserveinfo");
+		return mv;
+	}
+
+	//예약취소하기 삭제
+	@PostMapping("/reserve/delete")
+	@ResponseBody
+	public String delete(ReserveTimeReqDto rtDto, Principal pricipal) throws Exception {
+		rtDto.setMemId(pricipal.getName());
+		int result = reserveService.deleteReserve(rtDto);
+		
+		 return String.valueOf(result);
+	}
 	
 	
 	//리뷰관리
 	//리뷰리스트
 	@GetMapping("/review")
-	public ModelAndView selectReviewList(ModelAndView mv) throws Exception {
+	public ModelAndView selectReviewList(ModelAndView mv
+			, @RequestParam(value="page", defaultValue="1") int page
+			, Principal principal
+			) throws Exception {
+
+		List<ProductVo> productList = pservice.selectHostProductList(principal.getName());
+		int proNum = 0;
+		
+	    if (productList.size() > 0) {
+	        proNum = productList.get(productList.size() - 1).getProNum();
+	    }
+	    
+		Map<String, Object> userQna = new HashMap<>();
+		userQna.put("productList", productList);
+		userQna.put("selectedProNum", proNum);
+		List<ReviewResReqVo> rsvo = rv_service.userRsvNumSelect(proNum);
+		userQna.put("userRsvNum", rsvo);
+		List<ReviewResReqVo> reviewList = rv_service.selectReviewList(proNum);
+		userQna.put("reviewList", reviewList);
+		mv.addObject("userQna", userQna);
 		mv.setViewName("/host/review");
 		return mv;
 	}	

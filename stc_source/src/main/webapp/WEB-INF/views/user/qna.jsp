@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>사용자 - Q&A 관리</title>
+<title>사용자 - 내 Q&A</title>
 <%@ include file="/WEB-INF/views/module/link.jsp" %>
 <script src="https://code.jquery.com/jquery-3.6.3.js" ></script>
 </head>
@@ -21,9 +21,9 @@
                         <div class="">
                             <form action="" class="form-inline">
                                 <div class="form-group">                                   
-                                    <select name="selectedProNum" id="selectedProNum" class="form-control" title="내 공간 목록">
-										<c:forEach items="${userQna.productList }" var="product"> 	
-				                        	<option value="${product.proNum }" >${product.proName }</option>
+                                    <select name="selectedProNum" id="selectedProNum" class="form-control" style="width: 220px;">
+                                    	<c:forEach items="${userQna.productList }" var="product"> 	
+				                        	<option value="${product.proNum }">${product.proName }</option>
 										</c:forEach>
                                     </select>
                                 </div>
@@ -35,7 +35,7 @@
 
                 <!-- 테이블구역 -->
 				<div class="container" style="color: black; margin-top: 40px;" >
-					<table class="table table-striped" border="1px">
+					<table class="table table-striped">
 						<thead>
 				    		<tr>
 						        <th colspan="1" class="text-center">날짜</th>
@@ -50,10 +50,10 @@
 				</div>
 				
 				<!-- qna 페이징 -->
-	            <div class="col-md-12 clear"> 
+	            <div class="col-md-12 clear" style="padding-top: 100px;"> 
 					<div class="text-center">
 	    				<div class="pagination">
-	        				<ul class="pagination-sm">
+	        				<ul>
 								
 	            			</ul>
 	        			</div>
@@ -76,6 +76,9 @@
 		var selectedProNum = $("#selectedProNum").val();
 		var memId = '${pageContext.request.userPrincipal.name}';
 		var page = $(this).data("page");
+		if(!selectedProNum){
+			selectedProNum = 0;
+		}
 		if(!page){
 			page=1;
 		}
@@ -89,8 +92,8 @@
 		   			}
 			 
 		   , dataType: "json"  
-      	   , success: function (result) { 
-      			displayQnaList(result);
+      	   , success: function (result) {
+      		   displayQnaList(result);
 			}
 		   , error : function(request,status,error) {
 			   alert("code:" + request.status + "\n" + "message:" +
@@ -144,7 +147,7 @@
 	
 	function displayPaging(result){
 		var htmlVal = '';
-		htmlVal += '<ul class="pagination-sm">';
+		htmlVal += '<ul>';
     				if(result.pageInfo.currentPage == 1){
 		htmlVal +='				<li><a class="disabled pe-7s-angle-left"></a></li>';
     				} else {
@@ -216,7 +219,7 @@
       			, dataType: "json"  
       			, success: function (result) { 
       				
-       				if(result.qnaList.length > 0) { 
+       				if(result.qnaList.length >= 0) { 
        					alert("삭제되었습니다.")
        					displayQnaList(result);
        				}            				 

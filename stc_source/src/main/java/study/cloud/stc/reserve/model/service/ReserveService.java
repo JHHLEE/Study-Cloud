@@ -18,8 +18,19 @@ public interface ReserveService {
 	//예약
 	public int insertReserve(ReserveTimeReqDto rtDto) throws Exception;
 	
+	//예약 삭제
+	public int deleteReserve(ReserveTimeReqDto rtDto) throws Exception;
+	
+	public int selectTotalCount() throws Exception;
+		
 	//예약확인
 	public List<ReserveVo> selectReserveList(ReserveTimeReqDto rtDto) throws Exception;
+	
+	public List<ReserveVo> selectList(ReserveTimeReqDto rtDto) throws Exception;
+	
+	public List<ReserveVo> selectReserveListForHost(ReserveTimeReqDto rtDto) throws Exception;
+	
+	public List<ReserveVo> selectListForHost(ReserveTimeReqDto rtDto) throws Exception;
 	
 	//상품이름
 	public MapVo selectProName(ReserveTimeReqDto vo) throws Exception;
@@ -31,6 +42,7 @@ public interface ReserveService {
 	public List<ProductTimePriceDto> selectTimePriceRsvList(ProductTimeReqDto dto) throws Exception;
 	
 	public ReserveTimeReqDto selectRsvNum(ReserveTimeReqDto rtDto) throws Exception;
+
 
 }
 

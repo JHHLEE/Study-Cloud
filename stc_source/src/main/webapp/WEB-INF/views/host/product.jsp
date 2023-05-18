@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품 목록</title>
 <%@ include file="/WEB-INF/views/module/link.jsp"%>
 </head>
 <body>
@@ -35,12 +35,14 @@
 									<div class="col-md-4 p0">
 
 										<div class="box-two proerty-item" style="height: 170px">
-											<div class="item-thumb">list.picList[0]<a	href="${pageContext.request.contextPath}/product/detail?proNum=${list.proNum }">
+											<div class="item-thumb">
 											<c:if test="${not empty list.picList[0]}">
-													<img src="${pageContext.request.contextPath }/resources/uploadfiles/${list.picList[0].proPicRename}"/></a>
+													<a href="${pageContext.request.contextPath}/product/detail?proNum=${list.proNum }">
+													<img src="${pageContext.request.contextPath }/resources/uploadfiles/${list.picList[0].proPicRename}"/>
+													</a>
 											</c:if>
 											</div>
-											<div class="item-entry overflow">
+											<div class="item-entry overflow" style="float:right";>
 												<h5>
 													<a
 														href="${pageContext.request.contextPath}/product/detail?proNum=${list.proNum }">${list.proName }</a>
@@ -110,25 +112,6 @@
 	</script>
 
 
-
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/vendor/modernizr-2.6.2.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js//jquery-1.10.2.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/bootstrap/js/bootstrap.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/bootstrap-select.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/bootstrap-hover-dropdown.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/easypiechart.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/jquery.easypiechart.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/owl.carousel.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/wow.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/icheck.min.js"></script> --%>
-
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/price-range.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/jquery.bootstrap.wizard.js" type="text/javascript"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/jquery.validate.min.js"></script> --%>
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/wizard.js"></script> --%>
-
-<%-- 		<script	src="<%=request.getContextPath()%>/resources/sneat/assets/js/main.js"></script> --%>
-		
 		</div>
 		
 		</div>

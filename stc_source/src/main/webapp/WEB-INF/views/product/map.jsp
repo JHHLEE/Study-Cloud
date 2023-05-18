@@ -29,21 +29,27 @@
                                 <div class="col-md-12">
                                 	<div class="col-md-4">                                     
 	                                    <select id="basic" name="proAddress" class="selectpicker show-tick form-control" data-live-search="true" data-live-search-style="begins" onchange="submit();">
-	                                         	<option value="">지역</option>	                                        	
-	                                        <c:forEach var="v" items="${add }">
-												<option value="${v }">${v }</option>
+	                                        <option value="" ${param.proAddress eq v ? 'selected' : '' }>
+                                        		<c:if test="${!empty param.proAddress}">${param.proAddress}</c:if>
+                                        		<c:if test="${empty param.proAddress}">지역</c:if>
+                                        	</option>                                      	
+	                                        <option value="">---------------------</option>
+	                                        <c:forEach var="v" items="${add }">	                                        
+											<option value="${v }">${v }</option>
 											</c:forEach>
                                     	</select>                                    	
                                 	</div>
-                                    <div class="col-md-4">                                   
-                                        <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="인원">
-											<c:forEach var="i" begin="0" end="20" step="5">
-										   		<option>${i }</option>
+                                    <div class="col-md-4">                   
+	                                    <select class="selectpicker" name="proPrice" onchange="submit();">
+	                                    		<option value="">가격</option>
+											<c:forEach var="price" begin="1000" end="3000" step="500">
+										   		<option value="${price }"><fmt:formatNumber value="${price }" />원</option>
 											</c:forEach>                                        
-                                    	</select>
+	                                    </select>
                                     </div>
                                     <div class="col-md-4">                                     
-                                       <input type="text" class="form-control" width="270" name="proDate" placeholder="${param.proDate}" onchange="submit();" onfocus="(this.type='date')" onfocusout="(this.type='text')"/>
+                                       <input type="text" class="form-control" width="270" name="proDate" placeholder="${!empty param.proDate ? param.proDate : '  날짜'}" 
+                                           onchange="submit();" onfocus="(this.type='date')" onfocusout="(this.type='text')"/>
                                     </div>
                                 </div>
                                 <div class="col-md-12 ">

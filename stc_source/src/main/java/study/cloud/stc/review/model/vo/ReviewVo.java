@@ -22,13 +22,13 @@ public class ReviewVo {
 //	PRO_NAME	VARCHAR2(100 BYTE)	Yes		2	상품이름
 //	REV_CONTENTS	VARCHAR2(1000 BYTE)	Yes		3	리뷰내용
 //	REV_DATE	TIMESTAMP(6)	Yes	"SYSDATE	"	4	리뷰작성시간
-//	MEM_AUTHORITY	VARCHAR2(20 BYTE)	Yes		5	계정권한
+//	REV_NUM	NUMBER	Yes		5	리뷰번호
 //	HOST_REPLY	VARCHAR2(1000 BYTE)	Yes		6	호스트답글  
 
 	private String rsvNum;
 	private String proName;
 	private String revContents;
 	private Date revDate;
-	private String memAuthority;
+	private String revNum;
 	private String hostReply;
 }

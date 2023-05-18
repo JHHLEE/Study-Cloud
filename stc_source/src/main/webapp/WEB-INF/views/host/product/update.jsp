@@ -78,13 +78,11 @@
                                         <input name="uploadfile" type="file" class="form-control" >
                                         <input type="hidden" name="proPicOriginalOld" value="${productDetail.proPicOriginal }">
                                         <input type="hidden" name="proPicRenameOld" value="${productDetail.proPicRename }">
-                                    	<img alt="" src="../{productDetail.proPicRename }">
+<!--                                     	<img alt="" src="../{productDetail.proPicRename }"> -->
                                     </div>
                                     
-                                </div>
-                               
-                               
-                               <input type="button" onclick="findPostCode()" value="주소 검색"><br>
+                                    
+                                    <input type="button" onclick="findPostCode()" value="주소 검색"><br>
 									<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
                                     
                                     <div class="form-group">
@@ -95,9 +93,7 @@
 									<span id="guide" style="color:#999;display:none"></span>
 									<input type="text" id="detailAddress" name="pre_proAddress"  placeholder="상세주소를 입력해주세요">
 									<input type="text" id="extraAddress" placeholder="참고항목" readonly>
-                                    
                                     </div>
-                               
                                
                                 <div class="col-sm-10 col-sm-offset-1">
                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -106,6 +102,11 @@
                                    
                                    <button type="submit" name="delete">삭제하기</button>
                                 </div>
+                                    
+                                </div>
+                               
+                               
+                               
                             </div>
                          </form>
                     </div>

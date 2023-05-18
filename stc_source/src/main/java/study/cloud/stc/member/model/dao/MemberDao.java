@@ -22,8 +22,6 @@ public class MemberDao {
         return session.selectOne("memberns.idCheck", memId);
     }
 	
-	
-	
 	public int insertJoin(MemberVo vo) {
 		return session.insert("memberns.insertJoin", vo);
 	}
@@ -183,6 +181,13 @@ public class MemberDao {
 	public MemberVo quitStdInfo(MemberVo stdVo)  throws Exception{
 		// TODO Auto-generated method stub
 		return session.selectOne("memberns.quitStdInfo", stdVo);
+	}
+
+
+
+	public MemberVo viweDetailInfo(String memId) {
+		// TODO Auto-generated method stub
+		return session.selectOne("memberns.viewDetailInfo", memId);
 	}
 
 	

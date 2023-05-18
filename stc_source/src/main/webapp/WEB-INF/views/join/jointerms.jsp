@@ -10,13 +10,13 @@
 <%@ include file="/WEB-INF/views/module/link.jsp" %>
 </head>
 
-<body>
+<body style="background: #f6f6f6;">
 <!-- Header area-->
 <%@ include file="/WEB-INF/views/module/header.jsp" %> 
 
 <!-- Start page header --> 
 <section>
-    <div class="count-area"> 
+    <div class="count-area" style="background: #f6f6f6;"> 
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-sm-12 text-center page-title">
@@ -204,7 +204,7 @@
 				return false;
 			} else {
 				// 모든 체크박스가 선택되어 있으므로 다음 페이지로 이동
-				location.href = '${pageContext.request.contextPath}/join/joinForm';
+				location.href = '${pageContext.request.contextPath}/join/joinform';
 			}
 		}).on('ifChecked ifUnchecked', 'input[name="chk"]', function() {
 			var checkedBoxes = $("input[name='chk']:checked");

@@ -30,6 +30,8 @@ import study.cloud.stc.reserve.model.service.ReserveService;
 import study.cloud.stc.reserve.model.vo.MapVo;
 import study.cloud.stc.reserve.model.vo.ReserveTimeReqDto;
 import study.cloud.stc.reserve.model.vo.ReserveVo;
+import study.cloud.stc.review.model.service.ReviewService;
+import study.cloud.stc.review.model.vo.ReviewResReqVo;
 
 @Controller
 @RequestMapping("/user")
@@ -41,7 +43,8 @@ public class UserController {
 	private ReserveService reserveService;
 	@Autowired
 	private QnaService qna_service;
-	
+	@Autowired
+	private ReviewService rv_service;
 	
 	//유저 마이페이지
 	@GetMapping
@@ -111,6 +114,7 @@ public class UserController {
 	public ModelAndView selectreserveList(
 			HttpServletRequest request, 
 			HttpServletResponse response,
+			@RequestParam(value="page", defaultValue="1") int page,
 			ModelAndView mv, 
 			Principal principal) throws Exception {
 		
@@ -120,25 +124,54 @@ public class UserController {
 		rtDto.setMemId(principal.getName());
 				
 		List<ReserveVo> reserveVo = reserveService.selectReserveList(rtDto);
+		List<ReserveVo> listVo = reserveService.selectList(rtDto); 
 		List<MapVo> mapVo = reserveService.selectProNameList();
 		
+		int currentPage = page; 
+		int totalCnt= reserveService.selectTotalCount(); 
+		Map<String, Integer> map= new Paging().paging(currentPage, totalCnt, 12, 3); 
+		mv.addObject("pageInfo", map);
+		
 		request.setAttribute("reserveVo", reserveVo);
+		request.setAttribute("listVo", listVo);
 		request.setAttribute("mapVo", mapVo);
 				
 		return mv;
 	}
 	
-	//예약확인상세페이지
-	@GetMapping("/reserve/info")
-	public ModelAndView dddddd(ModelAndView mv) throws Exception {
-		mv.setViewName("/user/reserve/info");
+	//예약취소하기 삭제
+	@PostMapping("/reserve/delete")
+	@ResponseBody
+	public String delete(ReserveTimeReqDto rtDto, Principal pricipal) throws Exception {
+		rtDto.setMemId(pricipal.getName());
+		int result = reserveService.deleteReserve(rtDto);
+		
+		 return String.valueOf(result);
+	}
+
+	
+	
+	//내 리뷰
+	@GetMapping("/review")
+	public ModelAndView selectReviewList(ModelAndView mv
+			, @RequestParam(value="page", defaultValue="1") int page
+			, Principal principal
+			) throws Exception {
+		
+		Map<String, Object> userReview = new HashMap<>();
+		
+		List<ReviewResReqVo> userRsvNum = rv_service.userRsvProName(principal.getName());
+		String proNum = userRsvNum.get(0).getProNum();
+		userReview.put("userRsvNum", userRsvNum);
+		ReviewResReqVo vo = new ReviewResReqVo();
+		vo.setProNum(proNum);
+		vo.setMemId(principal.getName());
+		List<ReviewResReqVo> reviewList = rv_service.selectUserReviewList(vo);
+		userReview.put("reviewList", reviewList);
+		mv.addObject("userReview", userReview);
+		mv.setViewName("/user/review");
 		return mv;
 	}
-	
-	//공간삭제
-	
-	
-	
 	
 	//내 Q&A
 	@GetMapping("/qna")
@@ -252,6 +285,9 @@ public class UserController {
 		int cntPerPage = 3; 
 		int currentPage = page;
 		int totalCnt = qna_service.selectUserQnaCount(vo);
+		if(totalCnt == 1) {
+			totalCnt = 0;
+		}
 		Map<String, Integer> map = new Paging().paging(currentPage, totalCnt, cntPerPage, 5);
 
 		List<QnaVo> productList = qna_service.selectUserQnaList(principal.getName());

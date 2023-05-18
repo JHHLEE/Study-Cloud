@@ -20,9 +20,6 @@ public class MemberServiceImpl implements MemberService {
 	public int insertJoin(MemberVo vo) throws Exception {
 		return dao.insertJoin(vo);
 	}
-	
-	
-	
 	@Override
 	public int idCheck(String memId) throws Exception{
 		return dao.idCheck(memId);
@@ -175,6 +172,14 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVo quitStdInfo(MemberVo stdVo) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.quitStdInfo(stdVo);
+	}
+
+
+
+	@Override
+	public MemberVo viweDetailInfo(String standname) {
+		// TODO Auto-generated method stub
+		return dao.viweDetailInfo(standname);
 	}
 	
 	

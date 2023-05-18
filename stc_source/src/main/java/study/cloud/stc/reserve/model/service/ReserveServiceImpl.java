@@ -22,10 +22,30 @@ public class ReserveServiceImpl implements ReserveService{
 	public int insertReserve(ReserveTimeReqDto rtDto) throws Exception {
 		return dao.insertReserve(rtDto);
 	}
+	
+	@Override
+	public int selectTotalCount() throws Exception {
+		return dao.selectTotalCount();
+	}
+	
+	@Override
+	public List<ReserveVo> selectReserveListForHost(ReserveTimeReqDto rtDto) throws Exception {
+		return dao.selectReserveListForHost(rtDto);
+	}
+	
+	@Override
+	public List<ReserveVo> selectListForHost(ReserveTimeReqDto rtDto) throws Exception {
+		return dao.selectListForHost(rtDto);
+	}
 
 	@Override
 	public List<ReserveVo> selectReserveList(ReserveTimeReqDto rtDto) throws Exception {
 		return dao.selectReserveList(rtDto);
+	}
+	
+	@Override
+	public List<ReserveVo> selectList(ReserveTimeReqDto rtDto) throws Exception {
+		return dao.selectList(rtDto);
 	}
 
 	@Override
@@ -46,4 +66,10 @@ public class ReserveServiceImpl implements ReserveService{
 	public ReserveTimeReqDto selectRsvNum(ReserveTimeReqDto rtDto) throws Exception {
 		return dao.selectRsvNum(rtDto);
 	}
+
+	@Override
+	public int deleteReserve(ReserveTimeReqDto rtDto) throws Exception {
+		return dao.deleteReserve(rtDto);
+	}
+
 }

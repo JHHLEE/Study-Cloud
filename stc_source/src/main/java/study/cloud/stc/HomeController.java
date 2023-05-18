@@ -44,5 +44,14 @@ public class HomeController {
 		mv.setViewName("contact");
 		return mv;
 	}
-
+	@GetMapping("/serviceterms")
+	public ModelAndView viewServiceTerms(ModelAndView mv) {
+		mv.setViewName("serviceterms");
+		return mv;
+	}
+	@GetMapping("/privacy")
+	public ModelAndView viewPrivacy(ModelAndView mv) {
+		mv.setViewName("privacy");
+		return mv;
+	}
 }

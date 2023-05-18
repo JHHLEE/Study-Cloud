@@ -33,46 +33,29 @@
                             <div class="light-slide-item">            
                                 <div class="clearfix">
                                     
-                                    <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-                                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-  </ol>
+<!--                                     <ul id="image-gallery" class="gallery list-unstyled cS-hidden"> -->
+   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 
-<!--   <!-- Wrapper for slides --> -->
-<%--    <c:forEach items="${product.detail.picList }" var="pic" varStatus="s"> --%>
-<!--   <div class="carousel-inner" role="listbox"> -->
-<!--     <div class="item active"> -->
-
-<%--   <img src="${pageContext.request.contextPath }/resources/uploadfiles/${pic.proPicRename}"/>    --%>
-<%-- <%--       <img src="${pageContext.request.contextPath }/resources/uploadfiles/${product.detail.proPicRename}"  alt="..."> --%> --%>
-<!--       <div class="carousel-caption"> -->
-<!--         ... -->
-<!--       </div> -->
-<!--     </div> -->
-<!--     ... -->
-<!--   </div> -->
-<%--   </c:forEach> --%>
-  
-  
-    <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-	
-	<c:forEach items="${product.detail.picList }" var="pic" varStatus="s">
-	<div class="item active">
-      <img src="${pageContext.request.contextPath }/resources/uploadfiles/${pic.proPicRename}"/>
+ <div class="carousel-inner" role="listbox" style="widht:100%; height:450px">
+ 
+    <div class="item active" >
+      <img src="${pageContext.request.contextPath }/resources/uploadfiles/${product.detail.picList[1].proPicRename}" alt="...">
+      <div class="carousel-caption">
+        ...
+      </div>
     </div>
-   
+ <c:forEach items="${product.detail.picList }" var="pic" varStatus="s">
+    
+    <div class="item" >
+      <img src="${pageContext.request.contextPath }/resources/uploadfiles/${pic.proPicRename}" alt="...">
+      <div class="carousel-caption">
+      </div>
+    </div>
+    </c:forEach>
   </div>
-      </c:forEach> 
-  
-     
-  
 
-  <!-- Controls -->
+
+
   <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
@@ -113,24 +96,6 @@
                                 <ul class="additional-details-list clearfix">
                                 
                                 ${product.detail.proInfo }
-<!--                                     <li> -->
-<!--                                         <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">영업시간</span> -->
-<!--                                         <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">0~24시</span> -->
-<!--                                     </li> -->
-
-<!--                                     <li> -->
-<!--                                         <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">층</span> -->
-<!--                                         <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">지상8층</span> -->
-<!--                                     </li> -->
-<!--                                     <li> -->
-<!--                                         <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">주차</span> -->
-<!--                                         <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">불가능</span> -->
-<!--                                     </li> -->
-
-<!--                                     <li> -->
-<!--                                         <span class="col-xs-6 col-sm-4 col-md-4 add-d-title">엘리베이터</span> -->
-<!--                                         <span class="col-xs-6 col-sm-8 col-md-8 add-d-entry">없음</span> -->
-<!--                                     </li> -->
                                 </ul>
                             </div>  
                             <!-- End additional-details area  -->
@@ -139,32 +104,13 @@
 
                                 <h4 class="s-property-title">유의사항</h4>   
                                 ${product.detail.proNotice }                         
-<!--                                 <ul> -->
-<!--                                     <li><a>잔여시간 환불 불가</a></li><br>    -->
-<!--                                     <li><a>소품 파손시 신품가격 변상</a></li><br> -->
-<!--                                     <li><a>퇴실시 기본적인 청소 및 소품 원위치</a></li><br> -->
-<!--                                     <li><a>고객님의 안전과 보안을 위하여 CCTV설치</a></li><br> -->
-<!--                                     <li><a>5분전퇴실</a></li><br> -->
-<!--                                     <li><a>작업실내 달리기/고함지르기 소음행위 금지</a></li> -->
-<!--                                 </ul> -->
-
                             </div>
                             <!-- End 유의사항 area  -->
-
-
 
                             <div class="section property-features">      
 
                                 <h4 class="s-property-title">환불규정</h4>       
                                 ${product.detail.proRefund }                     
-<!--                                 <ul> -->
-<!--                                     <li><a>이용 6일전 : 총 금액의 100% 환불</a></li><br>    -->
-<!--                                     <li><a>이용 5일전 : 환불 불가</a></li><br> -->
-<!--                                     <li><a>이용 4일전 : 환불 불가</a></li><br> -->
-<!--                                     <li><a>이용 3일전 : 환불 불가</a></li><br> -->
-<!--                                     <li><a>이용 2일전 : 환불 불가</a></li><br> -->
-<!--                                     <li><a>이용 1일전 : 환불 불가</a></li> -->
-<!--                                 </ul> -->
 
                             </div>
                             <!-- End 환불 규정 area  -->
@@ -188,29 +134,11 @@
 							<!-- qna 구역 끝 -->
  
                            
-                            <!-- start review area -->
-                            <div class="section property-share"> 
-                                <h4 class="s-property-title">review</h4> 
-                                <div class="client-text">                                
-                                    <p>접근성이 좋고 공간에 들어섰을때 아늑한 분위기가 너무 좋았습니다.</p>
-                                    <h4><strong>Ohidul Islam, </strong></h4>
-                                </div>
-                                <div class="client-text">                                
-                                    <p>깔끔하고 무료로 마실수 있어서 좋았어요 또 이용할 생각입니다</p>
-                                    <h4><strong>Ohidul Islam, </strong></h4>
-                                </div>
-                                <div class="client-text">                                
-                                    <p>넘 좋았어요 음료 1개 주는게 좋네요 다음에도 이용할게요</p>
-                                    <h4><strong>Ohidul Islam, </strong></h4>
-                                </div>
-                            
-                            </div>
+                            <!-- review 구역 시작 -->
+                            <%@ include file="/WEB-INF/views/product/review.jsp" %>
+                            <!-- review 구역 끝 -->
 
 
-                            <!-- End review area -->
-
-                            
-                      <!--   </div> -->
                        </div>
 
 
@@ -240,9 +168,10 @@
 	                }
 	            });
 	        });
-
+			</script>
  
 
+			<script>
           	
 			/* 지도 */
  			var mapContainer = document.getElementById('map'), 
@@ -292,6 +221,8 @@
 
 			</script>
 	</section>
+	
+	
 <%@ include file="/WEB-INF/views/module/footer.jsp" %>
 </body>
 </html>

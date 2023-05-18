@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,75 +49,42 @@ public class ReserveController {
 	@PostMapping("/reserve")
 	@ResponseBody
 	public String selectedValues(@RequestBody ReserveTimeReqDto rtDto, Principal pricipal) throws Exception {
+		String insertedRegDate = "";
+		
 		rtDto.setMemId(pricipal.getName());
 		this.rtDto = rtDto;
 		System.out.println("rtDto: " + this.rtDto);
-		reserveservice.insertReserve(rtDto);
-		//reserveservice.updateRsvNumToProTime(rtDto);
-		return "OK";
+		int result = reserveservice.insertReserve(rtDto);
+		if(result > 0) {
+			insertedRegDate = rtDto.getRegDate();
+		} else {
+			
+		}
+		return insertedRegDate;
 		
 	}
 	
-	@RequestMapping("/reservecheck")
-	public ModelAndView reservecheck(
-			HttpServletRequest request, 
-			HttpServletResponse response, 
-			//@RequestBody ReserveTimeReqDto rtDto,
+	@RequestMapping("/reserveinfo")
+	public ModelAndView reserveinfo(
+			ReserveTimeReqDto rtDto,
+			Principal principal,
 			ModelAndView mv) throws Exception {
-		mv.setViewName("/reserve/reservecheck");
-		System.out.println("rtDto: " + rtDto);
+		if(!principal.getName().contains("host")) {
+			rtDto.setMemId(principal.getName());
+		}
 		
+		System.out.println(rtDto.getMemId());
 		
 		ReserveTimeReqDto dto = reserveservice.selectRsvNum(rtDto);		
-		
 		MapVo mapVo = reserveservice.selectProName(rtDto);
 		
-		request.setAttribute("dto", dto);
-		request.setAttribute("mapVo", mapVo);
+		mv.addObject("dto", dto);
+		mv.addObject("mapVo", mapVo);
+
 		
+		mv.setViewName("/reserve/reserveinfo");
 		return mv;
 	}
-	
-	
-	//선택된 날짜의 time과 price, 그리고 예약상태를 알아오기 
-	@GetMapping("/timePriceRsv")
-	@ResponseBody
-	public List<ProductTimePriceDto> selectTimePriceRsvList(ProductTimeReqDto dto) throws Exception {
-		List<ProductTimePriceDto> timePriceRsvList =  reserveservice.selectTimePriceRsvList(dto);
-		return timePriceRsvList;  // json 형태임. springframework
-	}
-		
-	
-	 
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 	@ExceptionHandler(NullPointerException.class)
@@ -150,7 +118,6 @@ public class ReserveController {
 		mv.setViewName("errors/error");
 		return mv;
 	}
-//	@ExceptionHandler
 	@ExceptionHandler(Exception.class)
 	public ModelAndView memberExceptionHandler( Exception e
 			// 오류 발생함. ModelAndView mv

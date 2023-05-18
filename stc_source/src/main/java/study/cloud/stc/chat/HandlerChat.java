@@ -48,6 +48,7 @@ public class HandlerChat extends TextWebSocketHandler {
 		protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
 			ChattingVo vo = new ChattingVo();
+			ChattingVo rcvo = new ChattingVo();
 			ChattRoomVo crvo = new ChattRoomVo();
 			MemberRoomVo mrvo = new MemberRoomVo();
 			
@@ -92,7 +93,6 @@ public class HandlerChat extends TextWebSocketHandler {
 				vo.setRoomId((String) mapReceive.get("room_id"));
 				
 				// 1-2. chat 		- 저장 방식의 변화로 그냥 바로 문자 저장 가능
-				System.out.println("저장되는 메세지 : "+ vo);
 				service.addtMessage(vo);
 				
 				
@@ -102,6 +102,9 @@ public class HandlerChat extends TextWebSocketHandler {
 				crservice.updateChattRoom(crvo);
 			}
 			
+			rcvo.setMemId(division);
+			rcvo.setRoomId((String) mapReceive.get("room_id"));
+			rcvo.setChaContents((String) mapReceive.get("msg"));
 			
 			switch (mapReceive.get("cmd")) {
 			
@@ -163,7 +166,10 @@ public class HandlerChat extends TextWebSocketHandler {
 						
 						// 메세지 전송 시간이 들어있음
 						mapToSend.put("formatedNow", formatedNow);
-
+						
+						// 해당 메세지의 readCount
+						mapToSend.put("readCount",  Integer.toString(service.viewUnreadmsg(rcvo)));
+						
 						String jsonStr = objectMapper.writeValueAsString(mapToSend);
 						sess.sendMessage(new TextMessage(jsonStr));
 					}

@@ -45,6 +45,21 @@
 					/* $( '.chatLog' ).scrollTop($('.chatLog')[0].scrollHeight); */
 					$('#divChatData').append('<div align=\"left\" class=\"wrap\" >' + msgData.sender + '<div class=\"messageformleft\" style=\"max-width: 300px;\">' + msgData.msg + '</div>' + '<div class=\"chatTime\">'+ msgData.formatedNow+'</div>' +'</div>');
 
+					//readCount 줄이기
+					$.ajax({
+					url: '${pageContext.request.contextPath}/chatting/reducecount',
+					type: 'post',
+					data: { "msg" :  msgData.msg },
+					beforeSend : function(xhr){
+
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}"); 
+		                
+		            },
+		            success : function(data){
+		            	
+		            }
+				});	
+					
 					chatLog.scrollTop(chatLog.prop('scrollHeight'));
 				}
 				else if(msgData.division== "${standname }" ){
@@ -59,6 +74,8 @@
 					/* $( '.chatLog' ).scrollTop($('.chatLog')[0].scrollHeight); */
 					$('#divChatData').append('<div align=\"right\" class=\"wrap\">'+ msgData.sender +'<div class=\"chatTime\">'+ msgData.formatedNow + '</div>' + '<div class=\"messageformright\" style=\"max-width: 300px;\">' + msgData.msg +'</div>' +'</div>');
 
+					/* '이게readCount ' + msgData.readCount+ */
+					
 					chatLog.scrollTop(chatLog.prop('scrollHeight'));
 					
 				}
@@ -67,11 +84,52 @@
 			else if (msgData.cmd == 'CMD_ENTER') {
 				$('#divEnterChatData').append('<div align="center ">' + msgData.msg + '</div>');
 				
+				
+				// 들어왔을때 줄이기
+				$.ajax({
+					url: '${pageContext.request.contextPath}/chatting/entreducecount',
+					type: 'post',
+					data: { "enterId" :  msgData.enterId },
+					beforeSend : function(xhr){
+
+		                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}"); 
+		                
+		            },
+		            success : function(data){
+		            	
+		            }
+				});	
+				
+				
 				// 입장 시 참조 값
 				console.log('입장 한 사람: '+msgData.enterId );
 				
-				$('.exiter-'+msgData.enterId).remove();
-				$('.enter-'+msgData.enterId).remove();
+				$('.exit-'+msgData.enterId).remove();
+				$('.entry-'+msgData.enterId).remove();
+				
+				if("${detailInfo.memAuthority}" == "ROLE_ADMIN"){
+					
+					console.log("관리자");
+					
+						$('.admin-enter').append(
+		            		'<li class=\"list-group-item list-group-item-primary entry-'+msgData.enterId+'\">'+ msgData.enterId +'</li>'
+		            	);
+					
+					
+				}else{
+					console.log("일반 유저");
+					
+						$('.user-enter').append(
+								'<li class=\"list-group-item list-group-item-primary entry-'+msgData.enterId+'\">'+ msgData.enterId +'</li>'
+		            			
+		            	);
+				}
+				
+				console.log('입장 한 사람 권한: '+ "${detailInfo.memAuthority}");
+				
+				/* $('.exiter-'+msgData.enterId).remove();
+				$('.enter-'+msgData.enterId).remove(); */
+				
 				
 				$.ajax({
 					url: '${pageContext.request.contextPath}/chatting/onlinestatus',
@@ -99,9 +157,7 @@
 			            	);
 		            	
 		            }
-				});
-				
-
+				});				
 				
 			}
 			// 퇴장
@@ -154,7 +210,7 @@
 				webSocket.closeMessage(JSON.parse(evt.data));
 			}
 		},
-		_sendMessage : function(room_id, cmd, msg, division, formatedNow, sender, enterId, exitId) {
+		_sendMessage : function(room_id, cmd, msg, division, formatedNow, sender, enterId, exitId, readCount) {
 			var msgData = {
 				room_id : room_id,
 				cmd : cmd,
@@ -163,7 +219,8 @@
 				formatedNow : formatedNow,
 				sender : sender,
 				enterId : enterId,
-				exitId : exitId
+				exitId : exitId,
+				readCount : readCount
 			};
 			
 			var jsonData = JSON.stringify(msgData);
@@ -427,24 +484,24 @@
 		<div class="container">
 			<sec:authorize access="hasRole('ADMIN')">
 				<div class="col-md-4" style="">
-					<div class="col-xs-6" style="background-color:rgb(62,162,255); border-right-color: rgb(58,152,240); padding-top: 20px; height: 100px;">			
+					<div class="col-xs-6" style="background-color:rgb(136,176,75); border-right-color: rgb(136,176,75); padding-top: 20px; height: 100px;">			
 						<div style="text-align: center;">
-							<button type="button" style="background-color:rgb(62,162,255);" onclick="QuitRoom()">
+							<button type="button" style="background-color:rgb(136,176,75);" onclick="QuitRoom()">
 								<i class="fa fa-sign-out fa-5x" aria-hidden="true"></i>						
 							</button>
 						</div>			
 					</div>
-  					<div class="col-xs-6 roomCountdiv" style="background-color:rgb(62,162,255) ; border-color: rgb(58,152,240); height: 100px;" id="roomCountdiv">
-	  						<h5 id="fix-room" class="fix-room" style="color: white;">개설된 채팅방</h3>
+  					<div class="col-xs-6 roomCountdiv" style="background-color:rgb(136,176,75) ; border-color: rgb(58,152,240); height: 100px;" id="roomCountdiv">
+	  						<h5 id="fix-room" class="fix-room" style="color: white; align-content: center;">개설된 채팅방</h3>
 	  						<p style="font-size: 50px; color: white; padding-left: 30%;" id="fix-room" class="fix-room">${roomCount }</p>
   					</div>
   					<!-- <div class="col-xs-12" style="padding-left: 15px; padding-bottom: 5px ; padding-top: 5px; background-color: rgb(62,162,255); height: 60px;">
 						<input style="background-color: rgb(81,171,255); height: 100%; " type="text">
 					</div> -->
-					<div class="input-group col-xs-12" style="padding-left: 15px; padding-right: 15px; padding-bottom: 5px ; padding-top: 20px; background-color: rgb(62,162,255); height: 60px; margin-bottom: 10px;">
-				      <input type="text" class="form-control searchKeyword" id="searchKeyword" style="width: 100%; height: 100%; background-color: rgb(81,171,255); color: white; border-color:rgb(58,152,240) ;" placeholder="Search for...">
+					<div class="input-group col-xs-12" style="padding-left: 15px; padding-right: 15px; padding-bottom: 5px ; padding-top: 20px; background-color: rgb(136,176,75); height: 60px; margin-bottom: 10px;">
+				      <input type="text" class="form-control searchKeyword" id="searchKeyword" style="width: 100%; height: 100%; background-color: rgb(136,176,75); color: white; border-color:black ;" placeholder="Search for...">
 				      <span class="input-group-btn">
-				        <button class="btn btn-default searchRoom" id="searchRoom" style="width: 100%; height: 100%; background-color: rgb(81,171,255); color: rgb(138,208,255); border-color:rgb(58,152,240) ;" type="button">
+				        <button class="btn btn-default searchRoom" id="searchRoom" style="width: 100%; height: 100%; background-color: rgb(136,176,75); color: rgb(138,208,255); border-color:black ;" type="button">
 				        	<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
 				        </button>
 				      </span>
@@ -467,7 +524,7 @@
 						</ul>
 					</div>
 					<div class="input-group col-xs-12" style="padding-left: 15px; padding-right: 15px; padding-bottom: 5px ; padding-top: 10px; padding-bottom: 10px; margin-top: 20px; background-color: rgb(240,242,245); height: 60px; margin-bottom: 10px; height: 208px; ">
-						<ul style="height: 45%; padding-left: 0px; overflow: auto; list-style: none;" class="none-scroll">
+						<ul style="height: 45%; padding-left: 0px; overflow: auto; list-style: none;" class="none-scroll admin-enter">
 							<c:forEach items="${adminEntry }" var="aentry">
 								<c:choose>
 									<c:when test="${aentry.connectStatus == 'ONLINE' }">
@@ -479,7 +536,7 @@
 								</c:choose> 	
 							</c:forEach>															
 						</ul>
-						<ul style=" height: 45%; padding-left: 0px; overflow: auto; list-style: none;" class="none-scroll">
+						<ul style=" height: 45%; padding-left: 0px; overflow: auto; list-style: none;" class="none-scroll user-enter">
 							<c:forEach items="${userEntry }" var="uentry"> 
 								<c:choose>
 									<c:when test="${uentry.connectStatus == 'ONLINE' }">
@@ -621,7 +678,7 @@
 	  height: 50px;
 	  border-radius: 80%;
 	  background-color: white;
-	  border: black 3px solid;
+	  border: rgb(200,200,200) 3px solid;
 	  position: fixed;
 	  z-index: 2;
 	}
@@ -633,7 +690,7 @@
 	  height: 50px;
 	  border-radius: 80%;
 	  background-color: white;
-	  border: black 3px solid;
+	  border: rgb(200,200,200) 3px solid;
 	  position: fixed;
 	  z-index: 2;
 	}
@@ -650,7 +707,7 @@
 			}
 		
 		function QuitRoom(){
-			location.href="${pageContext.request.contextPath}/";
+			location.href="${pageContext.request.contextPath}/admin/chatting/list";
 		}
 	</script>
  	<%-- <div id="contentCover">

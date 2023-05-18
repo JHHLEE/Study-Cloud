@@ -42,9 +42,33 @@ public class ReserveDao {
 		return resultCnt;
 	}
 	
+	
+	//예약삭제
+	@Transactional
+	public int deleteReserve(ReserveTimeReqDto rtDto) throws Exception{
+		sqlSession.insert("reserve.updateForRsvdelete", rtDto);
+		return sqlSession.insert("reserve.rsvdelete", rtDto);
+	}
+	
+	public int selectTotalCount() throws Exception{
+		return sqlSession.selectOne("reserve.selectTotalCount");	
+	}
+	
+	public List<ReserveVo> selectReserveListForHost(ReserveTimeReqDto rtDto) throws Exception{
+		return sqlSession.selectList("reserve.selectReserveListForHost", rtDto);	
+	}
+	
+	public List<ReserveVo> selectListForHost(ReserveTimeReqDto rtDto) throws Exception{
+		return sqlSession.selectList("reserve.selectListForHost", rtDto);	
+	}
+	
 	//예약확인
 	public List<ReserveVo> selectReserveList(ReserveTimeReqDto rtDto) throws Exception{
 		return sqlSession.selectList("reserve.selectReserveList", rtDto);	
+	}
+	
+	public List<ReserveVo> selectList(ReserveTimeReqDto rtDto) throws Exception{
+		return sqlSession.selectList("reserve.selectList", rtDto);	
 	}
 	
 	//상품이름조회
@@ -148,4 +172,6 @@ public class ReserveDao {
 		
 		return dto;
 	}
+
+
 }

@@ -14,16 +14,16 @@
 <body>
 <%@ include file="/WEB-INF/views/module/header.jsp" %>
 <c:set var="add">
-	종로구,중구,용산구,성동구,광진구,동대문구,중랑구,성북구,강북구,도봉구,노원구,은평구,서대문구,마포구,양천구,강서구,구로구,금천구,영등포구,동작구,관악구,서초구,강남구,송파구,강동구,수원시,성남시,의정부시,안양시,부천시,광명시,평택시,동두천시,안산시,고양시,과천시,의왕시,구리시,남양주시,오산시,시흥시,군포시,하남시,용인시,파주시,이천시,안성시,김포시,화성시,광주시,양주시,포천시,여주시
+	종로구,중구,용산구,성동구,광진구,동대문구,중랑구,성북구,강북구,도봉구,노원구,은평구,서대문구,마포구,양천구,강서구,구로구,금천구,영등포구,동작구,관악구,서초구,강남구,송파구,강동구
 </c:set>
 <section>
         <div class="slider-area">
             <div class="slider">
                 <div id="bg-slider" class="owl-carousel owl-theme">
 
-                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-1.jpg" alt="GTA V"></div>
-                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-2.jpg" alt="The Last of us"></div>
-                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-1.jpg" alt="GTA V"></div>
+                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-5.jpg" alt="GTA V"></div>
+                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-6.jpg" alt="The Last of us"></div>
+                    <div class="item"><img src="<%=request.getContextPath() %>/resources/sneat/assets/img/slide1/slider-image-7.jpg" alt="GTA V"></div>
 
                 </div>
             </div>
@@ -43,14 +43,14 @@
                                     </select>
                                 </div>
                                 <div class="form-group">                                   
-                                    <select id="lunchBegins" class="selectpicker" data-live-search="true" data-live-search-style="begins" title="인원">
-										<c:forEach var="i" begin="0" end="20" step="5">
-									   		<option>${i }</option>
+                                    <select class="selectpicker" name="proPrice" title="가격">
+										<c:forEach var="price" begin="1000" end="3000" step="500">
+									   		<option value="${price }"><fmt:formatNumber value="${price }" />원</option>
 										</c:forEach>                                        
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                	<input type="text" class="form-control" width="270" name="proDate" placeholder="날짜" onfocus="(this.type='date')" onfocusout="(this.type='text')"/>
+                                	<input type="text" class="form-control" width="270" name="proDate" placeholder="  날짜" onfocus="(this.type='date')" onfocusout="(this.type='text')"/>
                                 </div>
                                 <button class="btn search-btn" type="submit" formaction="${pageContext.request.contextPath}/product">검색</button>
                                 <button class="btn search-btn" type="submit" formaction="${pageContext.request.contextPath}/product/map">지도</button>

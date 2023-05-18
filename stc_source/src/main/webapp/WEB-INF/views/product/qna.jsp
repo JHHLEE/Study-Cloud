@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
-
 							<div class="section property-share">
                           		<input type="hidden" class="form-control" name="proNum" value="${product.detail.proNum }">                                
                           		<h4 class="s-property-title">Q&A
@@ -53,7 +52,6 @@
 										<!-- replyQna modal -->
 										 
                                         <!-- qna 페이징 -->
-                                        <c:if test="${!empty qna.qnaNum }">
                                         <div class="col-md-12 clear"> 
 					                        <div class="text-center">
 					                            <div class="pagination">
@@ -63,24 +61,7 @@
 					                            </div>
 					                        </div>                
 					                    </div>
-					                    </c:if>
                                     </div>
-                                    <!-- /.comment -->
-        
-        
-                                    <!-- <div class="row comment last">
-        
-                                        <div class="col-sm-9 col-md-10">
-                                            <h5 class="text-uppercase">Louise Armero</h5>
-                                            <p class="posted"><i class="fa fa-clock-o"></i> September 23, 2012 at 12:00 am</p>
-                                            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
-                                                Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-                                            <p class="reply"><a href="#"><i class="fa fa-reply"></i> Reply</a>
-                                            </p>
-                                        </div>
-        
-                                    </div> -->
-                                    <!-- /.comment -->
                                 </section>
                             </div>
                             
@@ -122,8 +103,8 @@
            $(".btninsertQna").on("click", insertQna);
           	function insertQna() {
           		var memQuestionLength = $("[name=memQuestion]").val().trim().length;
-          		if(memQuestionLength < 1) {
-          			alert("글자 수가 적으면 등록되지 않습니다. 글을 입력해주세요.")
+          		if(memQuestionLength < 10) {
+          			alert("내용을 입력하세요(최소 10글자 이상).")
           			$("[name=memQuestion]").focus()
           			$("[name=memQuestion]").val("")
           			return false;
@@ -166,16 +147,22 @@
            			htmlVal += '<div class="col-sm col-md-12" id="'+qna.qnaNum+'">';
            			htmlVal += '<h5 class="text-uppercase">'+qna.memId
            			htmlVal += '<p class="posted pull-right">';
-          			if('${product.detail.memId}' == '${pageContext.request.userPrincipal.name}'){
-          			htmlVal += '<button data-toggle="modal" data-target="#replyQna'+qna.qnaNum+'" type="button">답변</button>&nbsp';
-          			}
           			if(qna.memId == '${pageContext.request.userPrincipal.name}'){
           			htmlVal += '<button data-toggle="modal" data-target="#updateQna'+qna.qnaNum+'" type="button">수정</button>&nbsp';
           			htmlVal += '<button class="delete btndeleteQna" type="button" data-qnanum="'+qna.qnaNum+'">삭제</button>';
           			}
           			htmlVal += '</p></h5>';
            			htmlVal += '<p class="posted">'+qna.qnaDate+'</p>';
-          			htmlVal += '<p class="posted">'+qna.memQuestion+'</p>';
+          			htmlVal += '<p class="posted">'+qna.memQuestion
+          			if('${product.detail.memId}' == '${pageContext.request.userPrincipal.name}'){
+          			htmlVal += '<button class="pull-right" data-toggle="modal" data-target="#replyQna'+qna.qnaNum+'" type="button">';
+          			if(qna.hostAnswer != null){
+          			htmlVal += '수정';
+          			} else {
+          			htmlVal += '답변';
+          			}
+          			htmlVal += '</button></p>';
+          			}
           			htmlVal += '</div>';
           			htmlVal += '<div class="col-sm col-md-8">';
           			if(qna.hostAnswer != null){
@@ -328,7 +315,7 @@
 	          			, success: function (result) { 
 	          				console.log(result);
 	
-	           				if(result.qnaList.length > 0) { 
+	           				if(result.qnaList.length >= 0) { 
 	           					alert("삭제되었습니다.")
 		           				displayQna(result);
 	           				}            				 
